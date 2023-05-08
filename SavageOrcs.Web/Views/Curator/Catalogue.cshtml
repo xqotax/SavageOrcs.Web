@@ -1,0 +1,67 @@
+﻿@using SavageOrcs.Web.ViewModels.Curator
+@using Microsoft.Extensions.Localization
+@using SavageOrcs.Web.Resources.Classes
+@inject LanguageService Language
+@model CuratorViewModel[]
+<div class="wrapper-search-curator">
+    <div class="curator-header-row">
+        <h2 class="curator-header-text">
+            @Language.GetCuratorKey("SearchHeader")
+        </h2>
+        <div class="curator-info-text">
+            <p>@Language.GetCuratorKey("SearchDescription")</p>
+        </div>
+    </div>
+    <div class="curator-table-row">
+        <div class="curator-data-col-container">
+            @await Html.PartialAsync("_CatalogueDataRows", Model)
+        </div>
+        <div class="curator-filter-col">
+            <div class="curator-filter-item">
+                <div class="curator-filter-multiselect-placeholder">
+                    <select name="curatorsMultiselect" id="curatorsMultiselect" multiple multiselect-search="true" multiselect-select-all="true" multiselect-hide-x="true">
+                        @foreach (var curator in Model)
+                        {
+                            <option value=@curator.Id>@curator.DisplayName</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="email-container">
+    <div class="email-col email-first-col">
+        <div class="email-text-info-row">
+            @Language.GetCuratorKey("SearchAreYouHaveMaterials")
+        </div>
+    </div>
+    <div class="email-col">
+        <div class="email-text-info-row">
+            @Language.GetMainKey("MainContactUs")
+        </div>
+        <div class="email-text-info-row mr-lg-2">
+            <a href="mailto:info@mizhvukhamy.com?subject=Application%20for%20joining%20the%20team">
+                info@mizhvukhamy.com
+            </a>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        var catalogueCuratorView = new CatalogueCuratorView();
+
+        catalogueCuratorView.SelectedText = @Json.Serialize(Language.GetMainKey("MultiselectSelectedText"));
+        catalogueCuratorView.MultiselectAll = @Json.Serialize(Language.GetMainKey("MultiselectAll"));
+
+        catalogueCuratorView.CuratorTextPlaceholder = @Json.Serialize(Language.GetTextKey("MultiselectCuratorTextPlaceholder"));
+        catalogueCuratorView.SearchTextCurator = @Json.Serialize(Language.GetTextKey("MultiselectSearchTextCurator"));
+
+        $(document).ready(function () {
+            catalogueCuratorView.InitializeControls();
+        });
+
+    </script>
+}

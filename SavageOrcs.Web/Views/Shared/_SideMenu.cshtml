@@ -1,0 +1,89 @@
+﻿@using SavageOrcs.Web.Resources
+@using SavageOrcs.Web.Resources.Classes
+@inject LanguageService Language
+@{
+    Layout = null;
+}
+<div class="hidden-menu">
+    <div class="hide-menu-col lng-col">
+        <a id="uk" style="color: #0F0F0F;" asp-route-culture="uk-UA" asp-controller="Map" asp-action="ChangeLanguage">УКР</a>
+        <a id="en" style="color: #0F0F0F;" asp-route-culture="en-US" asp-controller="Map" asp-action="ChangeLanguage">ENG</a>
+    </div>
+    <div class="hide-menu-col">
+        <div class="hide-menu-small-text">
+            @Language.GetMainKey("SideMenuSearchLabel")
+        </div>
+        <a class="hide-menu-big-text" style="color: #0F0F0F; text-decoration-line: none" href="/Mark/Catalogue">@Language.GetMainKey("SideMenuSearchButton")</a>
+    </div>
+    <div class="hide-menu-col">
+        <div class="hide-menu-small-text">
+            @Language.GetMainKey("SideMenuTextsLabel")
+        </div>
+        <a class="hide-menu-big-text" style="color: #0F0F0F; text-decoration-line: none" href="/Text/Catalogue">@Language.GetMainKey("SideMenuTextsButton")</a>
+    </div>
+    <div class="hide-menu-col">
+        <div class="hide-menu-small-text">
+            @Language.GetMainKey("SideMenuContributorsLabel")
+        </div>
+        <a class="hide-menu-big-text" style="color: #0F0F0F; text-decoration-line: none" asp-area="" asp-controller="Curator" asp-action="Catalogue">@Language.GetMainKey("SideMenuContributorsButton")</a>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        var state = true;
+        $(".cross, .burger").on("click", function () {
+            if (state) {
+                var clientWidth = window.innerWidth;
+                if (clientWidth >= 700) {
+                    $(".hidden-menu").animate({
+                        height: window.innerHeight
+                    }, 300);
+                }
+                else if (clientWidth < 700 && clientWidth >= 460) {
+                    $(".hidden-menu").animate({
+                        height: (window.innerHeight - 80)
+                    }, 300);
+                }
+                else if (clientWidth < 460) {
+                    $(".hidden-menu").animate({
+                        height: (window.innerHeight - 60) //outerHeight
+                    }, 300);
+                }
+                $(".burger").css({ display: 'none' });
+                $(".cross").css({ display: 'flex' });
+                $(".hidden-menu").css({ display: 'flex' });
+
+            } else {
+                var clientWidth = window.innerWidth;
+                if (clientWidth >= 700) {
+                    $(".hidden-menu").animate({
+                        height: 0
+                    }, 400);
+                }
+                else if (clientWidth < 700) {
+                    $(".hidden-menu").animate({
+                        height: 200
+                    }, 400);
+                }
+
+                $(".burger").css({ display: 'flex' });
+                $(".cross").css({ display: 'none' });
+
+                setTimeout(function () {
+                    $(".hidden-menu").css({ display: 'none' });
+                }, 350);
+            }
+            state = !state;
+        });
+    });
+
+    $(document).ready(function () {
+        if ($.cookie(".AspNetCore.Culture").includes("en-US")) {
+            $("#en").css({"text-decoration": "underline"});
+        }
+        else if ($.cookie(".AspNetCore.Culture").includes("uk-UA")) {
+            $("#uk").css({ "text-decoration": "underline" });
+        }
+    });
+</script>

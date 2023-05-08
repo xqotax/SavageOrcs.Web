@@ -1,0 +1,129 @@
+﻿@using SavageOrcs.Web.ViewModels.Map
+@using Microsoft.Extensions.Localization
+@using SavageOrcs.Web.Resources
+@using SavageOrcs.Web.Resources.Classes
+@inject LanguageService Language
+@model MapCoordinatesViewModel
+
+<div class="wrapper-custom">
+    @*<img class="main-image" src="~/images/main/yourHouse-OurHouse.jpg" />*@
+    @* <img class="main-image-mob" src="~/images/main/yourHouse-OurHouse-mob.png" />*@
+    <div class="info-container">
+        <img class="uncertain-point" src="~/images/redCircle.png" />
+        <div class="main-photo-info">
+            <p>@Language.GetMainKey("MainPhotoResourceName")</p>
+            <p>@Language.GetMainKey("MainPhotoResourceDescription")</p>
+            <p>@Language.GetMainKey("MainPhotoResourceArea")</p>
+        </div>
+        <div class="main-text-info">@Language.GetMainKey("MainPhotoBigText")</div>
+    </div>
+    <div class="additional-text-info">
+        <div class="additional-text-info-col">
+            @Language.GetMainKey("MainLeftColProjectDescription")
+        </div>
+        <div class="additional-text-info-col" style="margin-right: 40px">
+            @Language.GetMainKey("MainRightColProjectDescription")
+        </div>
+    </div>
+    <div class="map-container">
+        <div class="map-row">
+            <div class="map-header-col">
+                <h1>@Language.GetMainKey("MainMapLabel")</h1>
+            </div>
+            <div class="clear-button-col">
+                <button id="clear-button">@Language.GetMainKey("ButtonClear")</button>
+                <div class="clear-button-img">
+                    <img src="~/images/icons/clear.png" alt="" />
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-between map-filter-container">
+            <div class="filter-item">
+                <div class="filter-multiselect-placeholder">
+                    <select name="namesMultiselect" id="namesMultiselect" multiple multiselect-search="true" multiselect-select-all="true" multiselect-hide-x="true">
+                        @foreach (var area in Model.KeyWords)
+                        {
+                            <option value=@("K" + area.Id.ToString())>@area.Name</option>
+                        }
+                        @foreach (var area in Model.MarkNames)
+                        {
+                            <option value=@("M" + area.Id.ToString())>@area.Name</option>
+                        }
+                        @foreach (var area in Model.ClusterNames)
+                        {
+                            <option value=@("C" + area.Id.ToString())>@area.Name</option>
+                        }
+                    </select>
+                </div>
+
+            </div>
+            <div class="filter-item">
+                <div class="filter-multiselect-placeholder">
+                    <select name="areasMultiselect" id="areasMultiselect" multiple multiselect-search="true" multiselect-select-all="true" multiselect-hide-x="true">
+                        @foreach (var area in Model.Areas)
+                        {
+                            <option value=@area.Id>@area.Name</option>
+                        }
+                    </select>
+                </div>
+
+            </div>
+            <div class="filter-item-search">
+                <div id="filter-big-text-info">@Language.GetMainKey("ButtonSearch")</div>
+            </div>
+        </div>
+        <div class="row-lg">
+            <div id="map"></div>
+        </div>
+    </div>
+    <div class="email-container">
+        <div class="email-col email-first-col">
+            <div class="email-text-info-row">
+                @Language.GetMainKey("MainContactsOffer")
+            </div>
+        </div>
+        <div class="email-col">
+            <div class="email-text-info-row">
+                @Language.GetMainKey("MainContactUs")
+            </div>
+            <div class="email-text-info-row mr-lg-2">
+                <a href="mailto:info@mizhvukhamy.com?subject=Application%20for%20joining%20the%20team">
+                    info@mizhvukhamy.com
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        var mapMainView = new MapMainView();
+        mapMainView.Lat = @Json.Serialize(Model.Lat);
+        mapMainView.Lng = @Json.Serialize(Model.Lng);
+        mapMainView.Marks = @Json.Serialize(Model.MapMarkViewModels);
+        mapMainView.Clusters = @Json.Serialize(Model.MapClusterViewModels);
+        mapMainView.MapId = @Json.Serialize(Model.Id);
+        mapMainView.MapName = @Json.Serialize(Model.Name);
+        mapMainView.SelectedText = @Json.Serialize(Language.GetMainKey("MultiselectSelectedText"));
+        mapMainView.AreaTextPlaceholder = @Json.Serialize(Language.GetMarkKey("MultiselectAreaTextPlaceholder"));
+        mapMainView.MultiselectAll = @Json.Serialize(Language.GetMainKey("MultiselectAll"));
+        mapMainView.SearchTextName = @Json.Serialize(Language.GetMarkKey("MultiselectSearchTextName"));
+        mapMainView.SearchTextArea = @Json.Serialize(Language.GetMarkKey("MultiselectSearchTextArea"));
+        mapMainView.NameTextPlaceholder = @Json.Serialize(Language.GetMarkKey("MultiselectNameTextPlaceholder"));
+
+        $(document).ready(function () {
+            var script = document.createElement("script");
+            script.src = "https://maps.googleapis.com/maps/api/js?key=" + "@Model.GoogleMapKey" + "&callback=initMap";
+            document.head.appendChild(script); 
+           
+            
+        });
+        function initMap() {
+            mapMainView.InitMap();
+            mapMainView.InitializeControls();
+        }
+    </script>
+
+    @*<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDuw7bPRLxL2yVBd9YArtpb47myhmUePGY&callback=initMap"></script>
+    <script src=@("https://maps.googleapis.com/maps/api/js?key=" + Model.GoogleMapKey + "&callback=initMap")></script>*@
+}

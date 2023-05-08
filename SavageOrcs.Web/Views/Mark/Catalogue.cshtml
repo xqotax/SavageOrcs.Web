@@ -1,0 +1,148 @@
+﻿@using SavageOrcs.Web.ViewModels.Mark
+@using Microsoft.Extensions.Localization
+@using SavageOrcs.Web.Resources.Classes
+@inject LanguageService Language
+@model UnitedCatalogueViewModel
+
+<style>
+    .slideshow-container {
+        width: 80%;
+        height: 400px;
+        position: relative;
+    }
+
+    @@media (max-width: 1100px) {
+        .slideshow-container {
+            width: 95%;
+        }
+    }
+    
+</style>
+
+<div class="wrapper-search">
+    <div class="mark-header-row">
+        <h2 class="mark-header-text">
+            @Language.GetMarkKey("SearchHeader")
+        </h2>
+        <div class="mark-header-info">
+            <div class="mark-info-text">
+                <p>@Language.GetMarkKey("SearchDescription")</p>
+            </div>
+            <div class="clear-button-container">
+                <button id="clear-button">@Language.GetMainKey("ButtonClear")</button>
+                <div class="clear-button-img">
+                    <img src="~/images/icons/clear.png" alt="" />
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="mark-table-row">
+        <div class="photo-col">
+            <div class="image-placeholder">
+                <div class="slideshow-container">
+                </div>
+            </div>
+        </div>
+        <div class="table-col">
+            <div class="filter-row">
+                <div class="filter-item-small"></div>
+                <div class="filter-item">
+                    <div class="filter-multiselect-placeholder">
+                        <select name="namesMultiselect" id="namesMultiselect" multiple multiselect-search="true" multiselect-select-all="true" multiselect-hide-x="true">
+                            @foreach (var area in Model.KeyWords)
+                            {
+                                <option value=@("K" + area.Id.ToString())>@area.Name</option>
+                            }
+                            @foreach (var area in Model.MarkNames)
+                            {
+                                <option value=@("M" + area.Id.ToString())>@area.Name</option>
+                            }
+                            @foreach (var area in Model.ClusterNames)
+                            {
+                                <option value=@("C" + area.Id.ToString())>@area.Name</option>
+                            }
+                        </select>
+                    </div>
+
+                </div>
+                <div class="filter-item">
+                    <div class="filter-multiselect-placeholder">
+                        <select name="areasMultiselect" id="areasMultiselect" multiple multiselect-search="true" multiselect-select-all="true" multiselect-hide-x="true">
+                            @foreach (var area in Model.Areas)
+                            {
+                                <option value=@area.Id>@area.Name</option>
+                            }
+                        </select>
+                    </div>
+
+                </div>
+                <div class="filter-item-search">
+                    <div id="filter-big-text-info">@Language.GetMainKey("ButtonSearch")</div>
+                </div>
+            </div>
+            <div class="data-row-container">
+                @await Html.PartialAsync("_CatalogueDataRows", Model.Marks)
+            </div>
+        </div>
+    </div>
+</div>
+<div class="email-container">
+    <div class="email-col email-first-col">
+        <div class="email-text-info-row">
+            @Language.GetMarkKey("SearchAreYouHaveMaterials")
+        </div>
+    </div>
+    <div class="email-col">
+        <div class="email-text-info-row">
+            @Language.GetMainKey("MainContactUs")
+        </div>
+        <div class="email-text-info-row mr-lg-2">
+            <a href="mailto:info@mizhvukhamy.com?subject=Application%20for%20joining%20the%20team">
+                info@mizhvukhamy.com
+            </a>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+
+    <script>
+        let slideIndex = 1;
+        if ($(".mySlides").length) {
+            showSlides(slideIndex);
+        }
+
+        function plusSlides(n) {
+            showSlides(slideIndex += n);
+        }
+
+        function currentSlide(n) {
+            showSlides(slideIndex = n);
+        }
+
+        function showSlides(n) {
+            let i;
+            let slides = document.getElementsByClassName("mySlides");
+            if (n > slides.length) { slideIndex = 1 }
+            if (n < 1) { slideIndex = slides.length }
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            slides[slideIndex - 1].style.display = "block";
+        }
+        var catalogueMarkView = new CatalogueMarkView();
+        catalogueMarkView.SelectedText = @Json.Serialize(Language.GetMainKey("MultiselectSelectedText"));
+        catalogueMarkView.AreaTextPlaceholder = @Json.Serialize(Language.GetMarkKey("MultiselectAreaTextPlaceholder"));
+        catalogueMarkView.MultiselectAll = @Json.Serialize(Language.GetMainKey("MultiselectAll"));
+        catalogueMarkView.SearchTextName = @Json.Serialize(Language.GetMarkKey("MultiselectSearchTextName"));
+        catalogueMarkView.SearchTextArea = @Json.Serialize(Language.GetMarkKey("MultiselectSearchTextArea"));
+        catalogueMarkView.NameTextPlaceholder = @Json.Serialize(Language.GetMarkKey("MultiselectNameTextPlaceholder"));
+        $(document).ready(function () {
+            catalogueMarkView.InitializeControls();
+            $(".data-row-container").css("overflow-x", "hidden");
+        });
+
+    </script>
+}

@@ -1,0 +1,42 @@
+﻿@page
+@using SavageOrcs.Web.ViewModels.Error;
+@model ErrorViewModel
+<style>
+    .not-found-contaier {
+        padding-left: 64px;
+        padding-right: 70px;
+        width: 100%;
+        height: 600px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #errorImg {
+        position: relative;
+        max-width: 100%;
+        max-height: 400px;
+    }
+
+    .error-message{
+        font-size: 24px;
+        font-weight: 500;
+        padding-bottom: 30px;
+    }
+
+    .error-go-main{
+        font-size: 34px;
+        font-weight: 500;
+    }
+</style>
+<div class="not-found-contaier">
+    <img id="errorImg" src="~/images/main/404.png" alt="" />
+    <div class="error-message">
+        Такої сторінки не існує
+    </div>
+    <div class="error-go-main">
+        <a asp-area="" asp-controller="Map" asp-action="Main">На головну</a>
+    </div>
+</div>
+
+

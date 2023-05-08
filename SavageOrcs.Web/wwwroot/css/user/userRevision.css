@@ -1,0 +1,26 @@
+﻿
+.wrapper-user-revision {
+    padding-left: 64px;
+    padding-right: 70px;
+    padding-top: 15px;
+    padding-bottom: 45px;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    width: 100%;
+}
+
+
+.table-header-revision-user-number, .table-body-revision-user-number {
+    width: 20%;
+}
+
+.table-header-revision-user-role-name, .table-body-revision-user-role-name {
+    width: 60%;
+}
+
+.table-header-revision-user-role-status, .table-body-revision-user-role-status {
+    width: 20%;
+}
+
+

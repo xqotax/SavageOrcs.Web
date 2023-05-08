@@ -1,0 +1,154 @@
+﻿@using Microsoft.Extensions.Localization
+@using SavageOrcs.Web.Resources
+@using SavageOrcs.Web.Resources.Classes
+@inject LanguageService Language
+<!DOCTYPE html>
+<html lang="en" prefix="og: http://ogp.me/ns#">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1.0" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery/jquery.cookie.js"></script>
+    <title>@Language.GetMainKey("Title")</title>
+    <meta name="description" content="@Language.GetMainKey("Description")">
+
+    <meta name="keywords" content="Війна, Україна, росія, Орки, вандалізм, Гаага, російські злочини, карта з фотографіями, геноцид">
+    <meta name="Author" content="Культурна інституція «Міжвухами»">
+    <meta name="Addres" content="Україна, Київ, Козацька 119 А">
+
+
+    <meta property="og:site_name" content="Настінні докази" />
+    <meta property='og:url' content="https://wallevidence.mizhvukhamy.com">
+    <meta property='og:title' content="@Language.GetMainKey("Title")">
+    <meta property='og:description' content="@Language.GetMainKey("Description")">
+    <meta property='og:image' content="~/images/redCircle.png">
+    <meta property='og:type' content="website">
+    <meta name="robots" content="all">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="Культурна інституція «Міжвухами»">
+    <meta name="twitter:title" content="@Language.GetMainKey("Title")">
+    <meta name="twitter:description" content="@Language.GetMainKey("Description")">
+    <meta name="twitter:image" content="~/images/redCircle.png">
+
+    <link rel="icon" href="~/images/icons/redCircle.ico">
+    @await Html.PartialAsync("_Styles")
+
+    @if (ViewBag.GoogleSiteVerificationContent != null)
+    {
+        <meta name="google-site-verification" content="@ViewBag.GoogleSiteVerificationContent" />
+    }
+</head>
+<body>
+    <div id="18PlusPopupPlaceholder"></div>
+    <div id="adminMenu"></div>
+    <script>
+        if ($.cookie("userSaw18+Message") !== "YES") {
+            $.ajax({
+                type: 'POST',
+                url: "/Map/Get18PlusPopup",
+                contentType: 'application/json; charset=utf-8',
+                success: function (src) {
+                    $("#18PlusPopupPlaceholder").html(src);
+                }
+            });
+        }
+        if ($.cookie("isAdmin") === "thisUserWasInside") {
+            $.ajax({
+                type: 'POST',
+                url: "/Mark/NavigationAdmin",
+                contentType: 'application/json; charset=utf-8',
+                success: function (src) {
+                    $("#adminMenu").html(src);
+                }
+            });
+        }
+
+    </script>
+    <header>
+        <nav class="burger">
+            <img src="~/images/main/burger.png" alt="cross" />
+        </nav>
+        <nav class="cross">
+            <img src="~/images/main/cross.svg" alt="cross" />
+        </nav>
+        <h1><a class="logo-text" asp-controller="Map" asp-action="Main">@Language.GetMainKey("WallEvidence")</a></h1>
+        <partial name="_SideMenu.cshtml" />
+    </header>
+    <main role="main" class="container-custom">
+        @RenderBody()
+    </main>
+    <footer>
+        <div class="d-flex justify-content-between-lg footer-text">
+            <div class="footer-main-text">
+                @Language.GetMainKey("FooterJoinInstagram")
+                <a href="https://instagram.com/wallevidence?igshid=ZjE2NGZiNDQ= " style="color: #FF2929">
+                    INSTAGRAM
+                </a>
+            </div>
+            <div class="footer-copy-text"> 
+                <p>@Language.GetMainKey("FooterDescription")</p>
+                <p>@Language.GetMainKey("FooterAllProtected") &copy; 2023</p>
+            </div>
+        </div>
+        <div class="d-flex justify-content-between footer-refernce">
+            <div class="teams">
+                <div class="team-text">
+                    @Language.GetMainKey("FooterMihzvyhamu")
+                </div>
+                <div class="reference-images">
+                    <a href="https://www.facebook.com/mizhvukhamyfb">
+                        <img src="~/images/main/mizhvuhamu.png" alt="Mizhvuhamu" />
+                    </a>
+                </div>
+               
+            </div>
+            <div class="teams">
+                <div class="team-text">
+                    @Language.GetMainKey("FooterDocumentingUkraine")
+                </div>
+                <div class="reference-images">
+                    <a href="https://www.iwm.at/documenting-ukraine">
+                        <img src="~/images/main/documentingUkraine.png" alt="Documenting Ukraine" />
+                    </a>
+                </div>
+            </div>
+            <div class="teams">
+                <div class="team-text">
+                    @Language.GetMainKey("FooterInfoPartner")
+                </div>
+                <div class="reference-images">
+                    <a href="https://ukrainer.net/nastinni-napysy/?fbclid=IwAR2Z4Ty3kdFmAj7vhZRBOqsbrkhP7x2AvAq9g665FbcjpUd3jcxj7iyk070">
+                        <img src="~/images/main/Ukraine.png" alt="Ukraine" />
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    @*<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/multiselect/multiselect-dropdown.js" asp-append-version="true"></script>
+    @*<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.18/dist/js/bootstrap-select.min.js"></script>*@
+    <script>
+        $(document).ready(function () {
+            setTimeout(() => {
+                var setMultiselctWidht = window.innerWidth < 700 
+                if (setMultiselctWidht)
+                {
+                    $(".multiselect-dropdown-custom-list").css({"height": "200px"});
+                }
+            }, 200);
+            var url = window.location.href;
+
+            if (url.indexOf('Revision') !== -1 || url.indexOf('User') !== -1) {
+                var footer = document.querySelector('footer');
+                footer.style.display = 'none';
+            }
+        });
+    </script>
+    
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

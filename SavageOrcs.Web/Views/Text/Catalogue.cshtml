@@ -1,0 +1,84 @@
+﻿@using SavageOrcs.Web.ViewModels.Text
+@using Microsoft.Extensions.Localization
+@using SavageOrcs.Web.Resources.Classes
+@inject LanguageService Language
+@model UnitedCatalogueTextViewModel
+
+<div class="wrapper-text-search">
+    <div class="curator-header-row">
+        <h2 class="curator-header-text">
+            @Language.GetTextKey("SearchHeader")
+        </h2>
+        <div class="curator-info-text">
+            <p>@Language.GetTextKey("SearchDescription")</p>
+        </div>
+    </div>
+    <div class="text-content-row">
+        <div class="text-content-col">
+            <div id="textContentPlaceholder"></div>
+        </div>
+        <div class="text-table-col">
+            <div class="text-search-filter-row">
+                <div class="text-search-filter-item">
+                    <div class="text-search-filter-multiselect-placeholder">
+                        <select name="textNamesMultiselect" id="textNamesMultiselect" multiple multiselect-search="true" multiselect-select-all="true" multiselect-hide-x="true">
+                            @foreach (var area in Model.TextNames)
+                            {
+                                <option value=@area.Id>@area.Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="text-search-filter-item">
+                    <div class="text-search-filter-multiselect-placeholder">
+                        <select name="curatorsMultiselect" id="curatorsMultiselect" multiple multiselect-search="true" multiselect-select-all="true" multiselect-hide-x="true">
+                            @foreach (var area in Model.Curators)
+                            {
+                                <option value=@area.Id>@area.Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="text-search-data-table">
+                @await Html.PartialAsync("_CatalogueDataRows", Model.Texts)
+            </div>
+        </div>
+    </div>
+</div>
+<div class="email-container">
+    <div class="email-col email-first-col">
+        <div class="email-text-info-row">
+            @Language.GetTextKey("SearchAreYouHaveMaterials")
+        </div>
+    </div>
+    <div class="email-col">
+        <div class="email-text-info-row">
+            @Language.GetMainKey("MainContactUs")
+        </div>
+        <div class="email-text-info-row mr-lg-2">
+            <a href="mailto:info@mizhvukhamy.com?subject=Application%20for%20joining%20the%20team">
+                info@mizhvukhamy.com
+            </a>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        var catalogueTextView = new CatalogueTextView();
+        catalogueTextView.SelectedText = @Json.Serialize(Language.GetMainKey("MultiselectSelectedText"));
+        catalogueTextView.MultiselectAll = @Json.Serialize(Language.GetMainKey("MultiselectAll"));
+
+        catalogueTextView.CuratorTextPlaceholder = @Json.Serialize(Language.GetTextKey("MultiselectCuratorTextPlaceholder"));
+        catalogueTextView.NameTextPlaceholder = @Json.Serialize(Language.GetTextKey("MultiselectNameTextPlaceholder"));
+        catalogueTextView.SearchTextName = @Json.Serialize(Language.GetTextKey("MultiselectSearchTextName"));
+        catalogueTextView.SearchTextCurator = @Json.Serialize(Language.GetTextKey("MultiselectSearchTextCurator"));
+
+
+        $(document).ready(function () {
+            catalogueTextView.InitializeControls();
+        });
+
+    </script>
+}

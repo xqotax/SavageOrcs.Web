@@ -1,0 +1,44 @@
+
+/*BUNDLE_CONFIG 
+{
+    "outputFileName": "site.min.css"
+}
+*/
+
+/*BUNDLE_INCLUDE("~/css/site.css")*/
+
+@media (min-width: 1000px) {
+    html {
+        font-size: 14px;
+    }
+    
+    
+}
+body {
+    background-color: #DEDCDC !important;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+a {
+    color: initial;
+    background-color: initial;
+    border: initial;
+    text-decoration: initial;
+}
+
+a:visited {
+    color: initial;
+    background-color: initial;
+    border: initial;
+    text-decoration: initial;
+}
+
+a:hover {
+    color: initial;
+    background-color: initial;
+    border: initial;
+    text-decoration: initial;
+}

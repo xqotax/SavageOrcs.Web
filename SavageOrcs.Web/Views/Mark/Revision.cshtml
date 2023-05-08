@@ -1,0 +1,133 @@
+﻿@using SavageOrcs.Web.ViewModels.Mark
+@using Microsoft.Extensions.Localization
+@using SavageOrcs.Web.Resources.Classes
+@inject LanguageService Language
+@model RevisionMarkViewModel
+<script>
+    function plusSlides(n) {
+        showSlides(slideIndex += n);
+    }
+
+    function currentSlide(n) {
+        showSlides(slideIndex = n);
+    }
+
+    function showSlides(n) {
+        let i;
+        let slides = document.getElementsByClassName("mySlides");
+        if (n > slides.length) { slideIndex = 1 }
+        if (n < 1) { slideIndex = slides.length }
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        slides[slideIndex - 1].style.display = "block";
+    }
+    //var catalogueMarkView = new CatalogueMarkView();
+
+    $(document).ready(function () {
+        $('.data-row:first').css('opacity', '1');
+        //catalogueMarkView.InitializeControls();
+    });
+
+    let slideIndex = 1;
+    if ($(".mySlides").length) {
+        showSlides(slideIndex);
+    }
+
+
+
+</script>
+<div id="imageFullScreenPlaceholder"></div>
+<div class="wrapper-mark-revision">
+    @if (User.IsInRole("Admin"))
+    {
+        <div class="row mt-1 mb-1 display-8-custom">
+            @if (Model.IsCluster)
+            {
+                <div class="col-md-auto pr-2">
+                    <a class="btn btn-dark-custom" href="/Cluster/Add?id=@Model.Id">Редагувати</a>
+                </div>
+                @*<div class="col-md-auto pr-2">
+                    <a class="btn btn-dark-custom" href="/Cluster/Delete?id=@Model.Id">Видалити</a>
+                </div>*@
+                <div class="col-md-auto pr-2">
+                    <a class="btn btn-dark-custom" href="/Cluster/Add">Додати ще один</a>
+                </div>
+            }
+            else
+            {
+                <div class="col-md-auto pr-2">
+                    <a class="btn btn-dark-custom" href="/Mark/Add?id=@Model.Id">Редагувати</a>
+                </div>
+                @*<div class="col-md-auto pr-2">
+                    <a class="btn btn-dark-custom" href="/Mark/Delete?id=@Model.Id">Видалити</a>
+                </div>*@
+                <div class="col-md-auto pr-2">
+                    <a class="btn btn-dark-custom" href="/Mark/Add">Додати ще одну</a>
+                </div>
+            }
+            
+        </div>
+        <hr style="border-top: 3px solid #3c6624">
+    }
+    <div class="mark-revision-navigation-row">
+        <button id="back"><img src="/images/arrows/leftArrow.png" class="mark-revision-back-button" /></button>
+    </div>
+    <div class="mark-revision-content-row">
+        <div class="mark-revision-content-col">
+            <div class="mark-revision-description">@Model.Description</div>
+            @*<div class="mark-revision-area">@Model.Area</div>
+            @if (!string.IsNullOrEmpty(Model.CuratorName))
+            {
+                <div class="mark-revision-curator">
+                    @Language.GetMarkKey("RevisionCuratorLabel") <span>@Model.CuratorName</span>
+                </div>
+            }*@
+            @if (!string.IsNullOrEmpty(Model.ResourceUrl) && !string.IsNullOrEmpty(Model.ResourceName))
+            {
+                <div class="mark-revision-resources">
+                    @Language.GetMarkKey("RevisionResourceLabel") <a style="color:white; text-decoration: underline;" target="_blank" href="@Model.ResourceUrl">@Model.ResourceName</a>
+                </div>
+            }
+            else if (string.IsNullOrEmpty(Model.ResourceUrl) && !string.IsNullOrEmpty(Model.ResourceName)){
+                <div class="mark-revision-resources">
+                    @Language.GetMarkKey("RevisionResourceLabel") <span>@Model.ResourceName</span>
+                </div>
+            }
+            @if (!Model.IsCluster && Model.ClusterId is not null)
+            {
+                <a class="mark-revision-cluster" style="color:white; text-decoration: underline;" href="/Cluster/Revision?id=@Model.ClusterId.ToString()">@Model.ClusterName </a>
+            }
+            @if (Model.IsCluster){
+                <a class="mark-revision-cluster" style="color:white; text-decoration: underline;" href="/Mark/Catalogue?clusterId=@Model.Id.ToString()">@Language.GetMarkKey("RevisionShowMoreLabel")</a>
+            }
+        </div><div class="mark-revision-space-col"></div>
+        <div class="mark-revision-image-col">
+            @if (Model.Images is not null && Model.Images.Length != 0)
+            {
+                @await Html.PartialAsync("_CatalogueImage", new RevisionImageViewModel{
+                    IsCluster = Model.IsCluster,
+                    Images = Model.Images,
+                    Id = Model.Id.Value,
+                    IsRevision = true
+                })
+            }
+            else
+            {
+                <div>@Language.GetMarkKey("RevisionPhotoIsEmpty")</div>
+            }
+        </div>
+    </div>
+    
+</div>
+
+@section Scripts{
+    <script>
+        var revisionMarkView = new RevisionMarkView();
+
+        $(document).ready(function () {
+            revisionMarkView.InitializeControls();
+        });
+        
+    </script>
+}
