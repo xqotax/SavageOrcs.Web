@@ -8,8 +8,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1.0" />
     <meta content="width=device-width, initial-scale=1" name="viewport" />
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/jquery/jquery.cookie.js"></script>
     <title>@Language.GetMainKey("Title")</title>
     <meta name="description" content="@Language.GetMainKey("Description")">
 
@@ -37,13 +35,15 @@
     <meta name="twitter:image:width" content="1330">
     <meta name="twitter:image:height" content="683">
 
-    <link rel="icon" href="~/images/icons/redCircle.ico">
-    @await Html.PartialAsync("_Styles")
-
     @if (ViewBag.GoogleSiteVerificationContent != null)
     {
         <meta name="google-site-verification" content="@ViewBag.GoogleSiteVerificationContent" />
     }
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery/jquery.cookie.js"></script>
+    <link rel="icon" href="~/images/icons/redCircle.ico">
+    @await Html.PartialAsync("_Styles")
 </head>
 <body>
     <div id="18PlusPopupPlaceholder"></div>
