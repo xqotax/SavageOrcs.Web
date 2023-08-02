@@ -22,6 +22,7 @@ namespace SavageOrcs.Services
         public async Task<AreaShortDto[]> GetUsedAreasAsync()
         {
             var areasFromMarks = (await _markRepository.GetAllAsync(x => x.Area != null))
+                .ToArray()
                 .Select(x => new AreaShortDto
                 {
                     Community = x.Area.Community,
@@ -34,6 +35,7 @@ namespace SavageOrcs.Services
                 });
 
             var areasFromCluster = (await _clusterRepository.GetAllAsync(x => x.Area != null))
+                .ToArray()
                 .Select(x => new AreaShortDto
                 {
                     Community = x.Area.Community,

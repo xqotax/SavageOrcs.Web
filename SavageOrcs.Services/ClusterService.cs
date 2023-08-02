@@ -37,7 +37,7 @@ namespace SavageOrcs.Services
 
         public async Task<ClusterDto[]> GetClusters()
         {
-            var clusters = await _clusterRepository.GetAllAsync();
+            var clusters = (await _clusterRepository.GetAllAsync()).ToArray();
 
             return clusters.Select(x => CreateClusterDto(x)).ToArray();
         }
@@ -51,7 +51,7 @@ namespace SavageOrcs.Services
 
         public async Task<ClusterDto[]> GetClustersByFilters(Guid[]? keyWordIds,  Guid[]? clusterIds, Guid[]? areaIds)
         {
-            var clusters = await _clusterRepository.GetAllAsync();
+            var clusters = (await _clusterRepository.GetAllAsync()).ToArray();
 
             var resultClusters = new List<Cluster>();
 

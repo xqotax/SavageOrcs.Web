@@ -52,7 +52,7 @@ namespace SavageOrcs.Repositories
             _context.Set<T>().RemoveRange(entities);
         }
 
-        public IEnumerable<T> GetAll(Expression<Func<T, bool>>? predicate = null)
+        public IQueryable<T> GetAll(Expression<Func<T, bool>>? predicate = null)
         {
             IQueryable<T> query = _context.Set<T>();
             if (predicate != null)
@@ -62,7 +62,7 @@ namespace SavageOrcs.Repositories
             return query;
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? predicate = null)
+        public async Task<IQueryable<T>> GetAllAsync(Expression<Func<T, bool>>? predicate = null)
         {
             IQueryable<T> query = await Task.FromResult(_context.Set<T>());
             if (predicate != null)

@@ -49,12 +49,12 @@ namespace SavageOrcs.Services
                 Subject = x.Subject,
                 CreatedDate = x.CreatedDate,
                 EnglisVersion = x.EnglishVersion,
-                Curator = x.CuratorId is not null ? 
+                Curator = x.CuratorId != null ? 
                     new GuidIdAndStringNameWithEnglishName 
                     { 
                         Id = x.CuratorId.Value, 
-                        Name = x.Curator?.Name, 
-                        NameEng = x.Curator?.NameEng, 
+                        Name = x.Curator.Name, 
+                        NameEng = x.Curator.NameEng, 
                     } : null,
             }).OrderByDescending(x => x.CreatedDate).ToArray();
         }
@@ -240,11 +240,11 @@ namespace SavageOrcs.Services
                 Subject = x.Subject,
                 CreatedDate = x.CreatedDate,
                 EnglisVersion = x.EnglishVersion,
-                Curator = x.Curator is null? null : new GuidIdAndStringNameWithEnglishName
+                Curator = x.Curator != null? null : new GuidIdAndStringNameWithEnglishName
                 {
                     Id = x.Curator.Id,
                     Name = x.Curator.Name,
-                    NameEng = x.Curator?.NameEng
+                    NameEng = x.Curator.NameEng
                 } 
             }).OrderByDescending(x => x.CreatedDate).ToArray(); ;
 
