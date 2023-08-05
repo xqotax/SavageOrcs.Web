@@ -9,16 +9,7 @@ using System.Globalization;
 using SavageOrcs.DataTransferObjects.Marks;
 using SavageOrcs.DataTransferObjects._Constants;
 using SavageOrcs.DataTransferObjects.Areas;
-using Microsoft.AspNetCore.Localization;
-using SavageOrcs.DataTransferObjects.Maps;
 using SavageOrcs.DataTransferObjects.Cluster;
-using SavageOrcs.DbContext.Migrations;
-using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
-using System.Drawing.Printing;
-using SavageOrcs.DataTransferObjects.Texts;
-using System.Xml.Linq;
-using NuGet.Packaging;
-using Microsoft.VisualBasic;
 
 namespace SavageOrcs.Web.Controllers
 {
@@ -127,11 +118,11 @@ namespace SavageOrcs.Web.Controllers
 
             if (markDto is null)
             {
-                areaDtos = await _areaService.GetAreasByNameAsync("Бахмут");
+                areaDtos = await _areaService.GetAreasAsync("Бахмут");
             }
             else
             {
-                areaDtos = await _areaService.GetAreasByNameAsync(markDto.Area is null ? "Бахмут" : markDto.Area.Name);
+                areaDtos = await _areaService.GetAreasAsync(markDto.Area is null ? "Бахмут" : markDto.Area.Name);
             }
 
             var addMarkViewModel = new AddMarkViewModel()
@@ -185,7 +176,7 @@ namespace SavageOrcs.Web.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<JsonResult> GetAreas([FromBody] SearchAreasViewModel searcAreasViewModel)
         {
-            var areaDtos = await _areaService.GetAreasByNameAsync(searcAreasViewModel.Text.ToUpper());
+            var areaDtos = await _areaService.GetAreasAsync(searcAreasViewModel.Text.ToUpper());
             var areaDropDownList = areaDtos.Select(x => new GuidIdAndNameViewModel
             {
                 Name = x.Name + ", " + x.Community + ", " + x.Region,

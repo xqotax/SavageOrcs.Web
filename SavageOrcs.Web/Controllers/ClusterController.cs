@@ -49,11 +49,11 @@ namespace SavageOrcs.Web.Controllers
 
             if (clusterDto is null)
             {
-                areaDtos = await _areaService.GetAreasByNameAsync("Херсон");
+                areaDtos = await _areaService.GetAreasAsync("Херсон");
             }
             else
             {
-                areaDtos = await _areaService.GetAreasByNameAsync(clusterDto.Area is null ? "Херсон" : clusterDto.Area.Name);
+                areaDtos = await _areaService.GetAreasAsync(clusterDto.Area is null ? "Херсон" : clusterDto.Area.Name);
             }
 
             var addClusterViewModel = new AddClusterViewModel

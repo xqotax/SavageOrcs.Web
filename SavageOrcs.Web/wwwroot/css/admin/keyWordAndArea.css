@@ -120,18 +120,20 @@
     padding-top: 30px;
 }
 
-.keyWord-row{
+.keyWord-row {
     width: 130%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
+
 .area-row {
     width: 120%;
     display: flex;
     flex-direction: column;
     height: 100px;
 }
+
 .area-row-first, .area-row-second {
     width: 100%;
     height: 40px;
@@ -149,7 +151,8 @@
 .area-row-first {
     margin-bottom: 10px;
 }
-.area-row-second{
+
+.area-row-second {
     margin-bottom: 30px;
 }
 
@@ -161,16 +164,10 @@
     width: 27%;
 }
 
-.places-delete-info {
-    height: 95px;
-    width: 90%;
-    font-weight: 400;
-    font-size: 24px;
-    line-height: 30px;
-    letter-spacing: 0.03em;
-    color: #ff0000;
-    padding-bottom: 30px;
+.areaSearch-result-row .text-box-custom {
+    width: 25% !important;
 }
+
 
 .areas-action-row #filterName,
 .areas-action-row #filterCommunity,
@@ -183,4 +180,63 @@
 
 .areasButton {
     width: 15%;
+}
+
+
+
+.areas-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 1000px;
+}
+
+.usedAreas-table, .areaSearch-table {
+    width: 55%;
+    position: relative;
+}
+
+.areaSearch-table {
+    width: 40%;
+}
+
+.usedAreas-table {
+    display: flex;
+    flex-direction: column;
+}
+
+.usedAreas-table .keyWords-content-row, .usedAreas-table .keyWords-header-action-col {
+    width: 100%;
+}
+
+.usedAreas-table .keyWords-header-action-col {
+    height: 150px;
+}
+
+.usedAreas-table .keyWords-content-row, .areaSearch-result-row {
+    height: 700px;
+    overflow-y: scroll;
+}
+.areaSearch-result-row{
+    margin-top: 90px;
+}
+
+.areas-action-row {
+    height: 60px;
+    padding-bottom: 20px;
+}
+
+.areaSearch-action-row .keyWordControl, .areaSearch-action-row button {
+    width: 19%;
+}
+
+.areaSearch-action-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 60px;
+    padding-bottom: 20px;
+}
+.areaSearch-result-row .area-row{
+    width: 100% !important;
 }

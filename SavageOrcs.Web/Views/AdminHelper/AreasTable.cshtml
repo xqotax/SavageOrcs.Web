@@ -1,0 +1,33 @@
+﻿@using SavageOrcs.DataTransferObjects.Areas
+@model AreaShortDto[]
+
+
+@foreach(var area in Model){
+    <div class="area-row pb-2">
+        <div class="area-row-first">
+            @Html.HiddenFor(x => area.Id)
+            <input type="text" class="text-box-custom form-control" value="@area.Name">
+            <input type="text" class="text-box-custom form-control" value="@area.Community">
+            <input type="text" class="text-box-custom form-control" value="@area.Region">
+            <button class="copy-video-button" value="@(area.Name + ", " + area.Community + ", " + area.Region)" onclick="areaView.CopyAreaFullName(this)"><img class="copy-video" src="~/images/icons/clone.png" /></button>
+        </div>
+        <div class="area-row-second">
+            <input type="text" class="text-box-custom form-control" value="@area.NameEng">
+            <input type="text" class="text-box-custom form-control" value="@area.CommunityEng">
+            <input type="text" class="text-box-custom form-control" value="@area.RegionEng">
+            <button class="btn btn-dark-custom" onclick="areaView.SaveOneRow(this)">Зберегти</button>
+        </div>
+    </div>
+}
+
+@section Scripts{
+
+    <script>
+        var areaView = new AreaView();
+
+        $(document).ready(function () {
+            areaView.InitializeControls();
+        });
+
+    </script>
+}

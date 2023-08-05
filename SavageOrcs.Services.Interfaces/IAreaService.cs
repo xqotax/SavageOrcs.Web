@@ -9,11 +9,9 @@ namespace SavageOrcs.Services.Interfaces
 {
     public interface IAreaService
     {
-        Task<AreaShortDto[]> GetAreasAsync();
+        Task<AreaShortDto[]> GetAreasAsync(string? name = null, string? community = null, string? region = null, int? count = null);
 
         Task<AreaShortDto[]> GetUsedAreasAsync();
-
-        Task<AreaShortDto[]> GetAreasByNameAsync(string name);
 
         Task SaveArea(AreaSaveDto areaDto);
     }

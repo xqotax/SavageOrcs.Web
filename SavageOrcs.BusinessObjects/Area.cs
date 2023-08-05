@@ -10,17 +10,7 @@ namespace SavageOrcs.BusinessObjects
     { 
         public Guid Id { get; set; }
 
-        public long? Lvl_1 { get; set; }
-
-        public long? Lvl_2 { get; set; }
-
-        public long? Lvl_3 { get; set; }
-
-        public long? Lvl_4 { get; set; }
-
         public string Name { get; set; }
-
-        public long Code { get; set; }
 
         public string Region { get; set; }
 

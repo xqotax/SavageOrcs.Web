@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SavageOrcs.DataTransferObjects._Constants;
 using SavageOrcs.DataTransferObjects.Areas;
+using SavageOrcs.DataTransferObjects.Marks;
 using SavageOrcs.Services.Interfaces;
 using SavageOrcs.Web.ViewModels.Area;
 using SavageOrcs.Web.ViewModels.Constants;
+using SavageOrcs.Web.ViewModels.Mark;
 using System.Data;
 
 namespace SavageOrcs.Web.Controllers
@@ -90,9 +92,24 @@ namespace SavageOrcs.Web.Controllers
                 await _areaService.SaveArea(area);
             }
 
-            return Json(null);
+            return Json(new SaveMarkResultViewModel
+            {
+                Id = null,
+                Success = true,
+                Url = "",
+                Text = "Населений пункт успішно збережений"
+            });
         }
 
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> SearchInAllAreas([FromBody]AreaCatalogueViewModel areaCatalogueViewModel)
+        {
+            var areas = await _areaService.GetAreasAsync(areaCatalogueViewModel.Name, areaCatalogueViewModel.Community, areaCatalogueViewModel.Region, 20);
+
+            return PartialView("AreasTable", areas);
+        }
         
+
     }
 }

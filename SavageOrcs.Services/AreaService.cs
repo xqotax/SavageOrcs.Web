@@ -50,27 +50,17 @@ namespace SavageOrcs.Services
             return areasFromCluster.Concat(areasFromMarks).GroupBy(x => x.Id).Select(x => x.First()).OrderBy(x => x.Region).ThenBy(x => x.Name).ToArray();
         }
 
-        public async Task<AreaShortDto[]> GetAreasByNameAsync(string name)
-        {
-            var areas = await _areaRepository.GetAllAsync(x => x.Name.StartsWith(name));
-            if ((areas == null) || (!areas.Any()))
-                throw new NotImplementedException();
-
-            return areas.Select(x => new AreaShortDto
-            {
-                Community = x.Community,
-                Id = x.Id,
-                Region = x.Region,
-                Name = x.Name,
-                RegionEng = x.RegionEng,
-                NameEng = x.NameEng,
-                CommunityEng = x.CommunityEng
-            }).ToArray();
-        }
-
-        public async Task<AreaShortDto[]> GetAreasAsync()
+        public async Task<AreaShortDto[]> GetAreasAsync(string? name = null, string? community = null, string? region = null, int? count = null)
         {
             var areas = await _areaRepository.GetAllAsync();
+
+            if (!string.IsNullOrEmpty(name)) areas = areas.Where(x => x.Name.Contains(name) || x.NameEng.Contains(name));
+
+            if (!string.IsNullOrEmpty(community)) areas = areas.Where(x => x.Community.Contains(community) || x.CommunityEng.Contains(community));
+
+            if (!string.IsNullOrEmpty(region)) areas = areas.Where(x => x.Region.Contains(region) || x.RegionEng.Contains(region));
+
+            if (count.HasValue) areas = areas.Take(count.Value);
 
             return areas.Select(x => new AreaShortDto
             {
@@ -96,8 +86,8 @@ namespace SavageOrcs.Services
             else
             {
                 area.Id = Guid.NewGuid();
-                 
-                if (!string.IsNullOrEmpty(areaDto.Name) && !string.IsNullOrEmpty(areaDto.Community) && !string.IsNullOrEmpty(areaDto.Region))  
+
+                if (!string.IsNullOrEmpty(areaDto.Name) && !string.IsNullOrEmpty(areaDto.Community) && !string.IsNullOrEmpty(areaDto.Region))
                     await _areaRepository.AddAsync(area);
             }
 
@@ -107,14 +97,6 @@ namespace SavageOrcs.Services
             area.CommunityEng = areaDto.CommunityEng;
             area.Community = areaDto.Community;
             area.RegionEng = areaDto.RegionEng;
-
-            var sameRegion = await _areaRepository.GetTAsync(x => x.Region.ToLower() == areaDto.Region.ToLower());
-            if (sameRegion != null) 
-                area.Lvl_1 = sameRegion.Lvl_1;
-
-            var sameCommunit = await _areaRepository.GetTAsync(x => x.Community.ToLower() == areaDto.Community.ToLower());
-            if (sameCommunit != null)
-                area.Lvl_2 = sameCommunit.Lvl_2;
 
             await UnitOfWork.SaveChangesAsync();
         }
