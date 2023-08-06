@@ -258,10 +258,10 @@ var AddTextView = Class.extend({
                         type: 'marker',
                     }
                 },
-                clearStyles: {
-                    class: ClearStylesTool,
-                    inlineToolbar: true,
-                },
+                //clearStyles: {
+                //    class: ClearStylesTool,
+                //    inlineToolbar: true,
+                //},
                 image: {
                     class: SimpleImage
                 },
@@ -668,47 +668,47 @@ class SimpleVideo {
     }
 }
 
-class ClearStylesTool {
-    static get isInline() {
-        return true;
-    }
+//class ClearStylesTool {
+//    static get isInline() {
+//        return true;
+//    }
 
-    static get title() {
-        return "Clear Styles";
-    }
+//    static get title() {
+//        return "Clear Styles";
+//    }
 
-    static get icon() {
-        return '<svg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 2C9.5 1.17157 8.82843 0.5 8 0.5H4C3.17157 0.5 2.5 1.17157 2.5 2V2.5H0.5V3.5H2.5V10.5H3.5V3.5H5.5V2.5H3.5V2C3.5 1.72386 3.72386 1.5 4 1.5H8C8.27614 1.5 8.5 1.72386 8.5 2V2.5H9.5V2ZM7.5 3.5V10.5H4.5V3.5H7.5Z"/></svg>';
-    }
+//    static get icon() {
+//        return '<svg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 2C9.5 1.17157 8.82843 0.5 8 0.5H4C3.17157 0.5 2.5 1.17157 2.5 2V2.5H0.5V3.5H2.5V10.5H3.5V3.5H5.5V2.5H3.5V2C3.5 1.72386 3.72386 1.5 4 1.5H8C8.27614 1.5 8.5 1.72386 8.5 2V2.5H9.5V2ZM7.5 3.5V10.5H4.5V3.5H7.5Z"/></svg>';
+//    }
 
-    //surround(range) {
-    //    const element = this.selection.findParentTag(this.tag);
-    //    if (element) {
-    //        element.outerHTML = element.innerHTML;
-    //    }
-    //}
+//    //surround(range) {
+//    //    const element = this.selection.findParentTag(this.tag);
+//    //    if (element) {
+//    //        element.outerHTML = element.innerHTML;
+//    //    }
+//    //}
 
-    surround(range) {
-        const selectedText = range.extractContents();
-        const span = document.createElement("span");
-        span.textContent = selectedText.textContent;
-        range.insertNode(span);
-    }
+//    surround(range) {
+//        const selectedText = range.extractContents();
+//        const span = document.createElement("span");
+//        span.textContent = selectedText.textContent;
+//        range.insertNode(span);
+//    }
 
-    checkState() { }
+//    checkState() { }
 
-    render() {
-        this.button = document.createElement("div");
-        this.button.classList.add("color-fire-btn");
-        this.button.innerHTML = this.constructor.icon;
-        this.button.title = this.constructor.title;
-        this.button.addEventListener("click", () => {
-            const selection = window.getSelection();
-            if (selection.rangeCount > 0) {
-                const range = selection.getRangeAt(0);
-                this.surround(range);
-            }
-        });
-        return this.button;
-    }
-}
+//    render() {
+//        this.button = document.createElement("div");
+//        this.button.classList.add("color-fire-btn");
+//        this.button.innerHTML = this.constructor.icon;
+//        this.button.title = this.constructor.title;
+//        this.button.addEventListener("click", () => {
+//            const selection = window.getSelection();
+//            if (selection.rangeCount > 0) {
+//                const range = selection.getRangeAt(0);
+//                this.surround(range);
+//            }
+//        });
+//        return this.button;
+//    }
+//}

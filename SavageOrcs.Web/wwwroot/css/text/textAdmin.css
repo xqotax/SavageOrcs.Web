@@ -95,3 +95,10 @@
     max-height: 25px;
     max-width: 25px;
 }
+xy-color-picker{
+    width:45px !important;
+    position: relative;
+}
+.ce-inline-tool {
+    width: 50px !important;
+}

@@ -1,4 +1,5 @@
-﻿using SavageOrcs.BusinessObjects;
+﻿using Microsoft.EntityFrameworkCore;
+using SavageOrcs.BusinessObjects;
 using SavageOrcs.DataTransferObjects._Constants;
 using SavageOrcs.DataTransferObjects.Blocks;
 using SavageOrcs.DataTransferObjects.Cluster;
@@ -37,13 +38,13 @@ namespace SavageOrcs.Services
         {
             var texts = await _textRepository.GetAllAsync();
 
-            return texts.Select(x => CreateTextDto(x)).OrderByDescending(x => x.CreatedDate).ToArray();
+            return texts.AsEnumerable().Select(x => CreateTextDto(x)).OrderByDescending(x => x.CreatedDate).ToArray();
         }
 
         public async Task<TextShortDto[]> GetShortTexts()
         {
             var texts = await _textRepository.GetAllAsync();
-            return texts.Select(x => new TextShortDto {
+            return texts.AsEnumerable().Select(x => new TextShortDto {
                 Id = x.Id,
                 Name = x.Name,
                 Subject = x.Subject,
@@ -70,7 +71,7 @@ namespace SavageOrcs.Services
         {
             var texts = await _textRepository.GetAllAsync();
 
-            return texts.Where(x => x.CuratorId.HasValue && x.CuratorId == curatorId)
+            return texts.Where(x => x.CuratorId.HasValue && x.CuratorId == curatorId).AsEnumerable()
                 .Select(x => new TextShortDto
                 {
                     Id = x.Id,
@@ -97,7 +98,7 @@ namespace SavageOrcs.Services
                     Name = text.Curator?.Name, 
                     NameEng = text.Curator?.NameEng
                 }:null,
-                BlockDtos = text.Blocks.Select(x => new BlockDto
+                BlockDtos = text.Blocks.AsEnumerable().Select(x => new BlockDto
                 {
                     Id = x.Id,
                     CustomId = x.CustomId,
@@ -233,7 +234,7 @@ namespace SavageOrcs.Services
                 texts = texts.Where(x => x.CuratorId.HasValue && curatorIds.Contains(x.CuratorId.Value));
             }
 
-            return texts.Select(x => new TextShortDto
+            return texts.AsEnumerable().Select(x => new TextShortDto
             {
                 Id = x.Id,
                 Name = x.Name,
