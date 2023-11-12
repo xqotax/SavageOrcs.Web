@@ -1,0 +1,64 @@
+﻿@using SavageOrcs.Web.ViewModels.SystemSetting;
+@model SystemSettingDto[]
+<style>
+
+    .system-setting-row {
+        width: 60%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-bottom: 5px;
+    }
+
+    .system-setting-value{
+        width: 40%;
+    }
+
+</style>
+<div class="wrapper-keyWords">
+    <h2 class="mb-2">Системні налаштування</h2>
+    @foreach (var systemSetting in Model)
+    {
+        <div class="system-setting-row">
+            @Html.HiddenFor(x => systemSetting.Id)
+            <div style="width: 33%">@systemSetting.Name</div>
+            @Html.TextBoxFor(m => systemSetting.Value, new { @class = "text-box-custom form-control system-setting-value"})
+            <button class="btn btn-dark-custom" onclick="saveSystemSetting(this)">Зберегти</button>
+        </div>
+    }
+
+    Пам'ятайте що змінити айді таблиці на нове не достатньо. Треба вказати правильне ім'я і що найголовніше - дати туди доступ пошті.
+    <br />
+    Парсер може працювати довго, особливо якщо треба завантажити багато фото. Краще заваріть чайку
+    <button style="max-width: 300px; margin-top: 10px;" class="btn btn-dark-custom" onclick="parse()">Запустити парсер</button>
+</div>
+<script>
+    function saveSystemSetting(el) {
+        var systemSettingDto = {
+            Id: $(el).parent().find("input:hidden").val(),
+            Value: $(el).parent().find("input:text").val()
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: "/SystemSetting/Save",
+            data: JSON.stringify(systemSettingDto),
+            contentType: 'application/json; charset=utf-8',
+            success: function (result) {
+                ResultPopUp(result.success, result.text, result.url, result.id);
+            }
+        });
+    }
+
+    function parse() {
+        $.ajax({
+            type: 'GET',
+            url: "/SystemSetting/Parse",
+            contentType: 'application/json; charset=utf-8',
+            success: function (result) {
+                ResultPopUp(result.success, result.text, result.url, result.id);
+            }
+        });
+    }
+
+</script>

@@ -40,6 +40,9 @@
             <div class="admin-menu-item">
                 <a class="nav-link btn btn-link" style="color: white" asp-area="" asp-controller="Text" asp-action="Add">Додати текст</a>
             </div>
+            <div class="admin-menu-item">
+                <a class="nav-link btn btn-link" style="color: white" asp-area="" asp-controller="SystemSetting" asp-action="Index">Системні налаштування</a>
+            </div>
         </div>
     }
     @if (SignInManager.IsSignedIn(User))

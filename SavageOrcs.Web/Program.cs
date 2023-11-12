@@ -14,11 +14,16 @@ using SavageOrcs.Web.Resources.Classes;
 using System.Globalization;
 using System.Reflection;
 
+
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("SavageOrcsDbContextConnection") ?? throw new InvalidOperationException("Connection string 'SavageOrcsDbContextConnection' not found.");
 
 
-
+string? connectionString;
+#if DEBUG
+connectionString = builder.Configuration.GetConnectionString("DeveloperConnection");
+#else
+    connectionString = builder.Configuration.GetConnectionString("SavageOrcsDbContextConnection");
+#endif
 
 builder.Services.AddDbContext<SavageOrcsDbContext>(options =>
     options.UseLazyLoadingProxies().UseSqlServer(connectionString));
@@ -40,6 +45,7 @@ builder.Services.AddScoped<ICuratorService, CuratorService>();
 builder.Services.AddScoped<IClusterService, ClusterService>();
 builder.Services.AddScoped<IHelperService, HelperService>();
 builder.Services.AddScoped<ITextService, TextService>();
+builder.Services.AddScoped<ISystemService, SystemService>();
 
 
 builder.Services.AddControllersWithViews();
@@ -130,6 +136,13 @@ app.MapControllerRoute(
     name: "Error",
     pattern: "{*val}",
     defaults: new { controller = "Error", action = "Error"});
+
+//app.MapControllerRoute(
+//       name: "SystemSetting",
+//       pattern: "{controller=SystemSetting}",
+//       defaults: new { controller = "SystemSetting", action = "Index" }
+//   );
+
 
 app.MapRazorPages();
 
