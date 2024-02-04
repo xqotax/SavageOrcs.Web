@@ -1,5 +1,6 @@
 ﻿using Google.Apis.Drive.v3;
 using Google.Apis.Sheets.v4;
+using Google.Apis.Sheets.v4.Data;
 using SavageOrcs.BusinessObjects;
 using System.Globalization;
 using System.Text;
@@ -57,9 +58,13 @@ namespace SavageOrcs.Services.Parser
                     continue;
 
                 mark.File = DownloadFile(driveService, fileId);
-                if (i > 3)
-                    break;
+
+#if DEBUG
+                if (i > 3) break;
+#endif
             }
+
+            throw new NotSupportedException();
 
             var dbMarks = new Dictionary<int, Mark>();
             var dbImages = new Dictionary<int, Image>();
@@ -143,6 +148,8 @@ namespace SavageOrcs.Services.Parser
                 Images = dbImages,
                 Marks = dbMarks
             };
+
+
 
             return result;
         }
@@ -234,17 +241,17 @@ namespace SavageOrcs.Services.Parser
                 if (statusCol.Value is null)
                     break;
 
+
                 for (var i = 1; i < response.Values.Count; i++)
                 {
                     var mark = new GoogleMark
                     {
-                        Row = i
+                        Row = i,
                     };
                     for (var j = 0; j < response.Values[i].Count; j++)
                     {
                         if (headers.TryGetValue(j, out string header))
                         {
-
                             switch (header.Trim())
                             {
                                 case "Посилання на зображення":
@@ -291,12 +298,47 @@ namespace SavageOrcs.Services.Parser
                         }
                     }
 
+                    if (mark.Status == "Оброблений")
+                        break;
+                    else
+                    {
+                        string updateRange = $"{sheetName}!{GetColumnName(statusCol.Key + 1)}{i + 1}"; 
+                        var valueRange = new ValueRange { Values = new List<IList<object>> { new List<object> { "Оброблений" } } };
+                        var updateRequest = service.Spreadsheets.Values.Update(valueRange, docId, updateRange);
+                        updateRequest.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.RAW;
+                        var updateResponse = updateRequest.Execute();
+                    }
+
                     marks.Add(mark);
                 }
             }
 
             return marks;
         }
+
+        private string GetColumnName(int columnNumber)
+        {
+            const int baseValue = 'A' - 1;
+            string columnName = "";
+
+            while (columnNumber > 0)
+            {
+                int remainder = columnNumber % 26;
+                if (remainder == 0)
+                {
+                    columnName = 'Z' + columnName;
+                    columnNumber = (columnNumber / 26) - 1;
+                }
+                else
+                {
+                    columnName = (char)(baseValue + remainder) + columnName;
+                    columnNumber = columnNumber / 26;
+                }
+            }
+
+            return columnName;
+        }
+
     }
 
     public class ParserResult
