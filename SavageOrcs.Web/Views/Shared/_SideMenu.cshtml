@@ -79,7 +79,10 @@
     });
 
     $(document).ready(function () {
-        if ($.cookie(".AspNetCore.Culture").includes("en-US")) {
+        if ($.cookie(".AspNetCore.Culture") === undefined) {
+            $("#en").css({ "text-decoration": "underline" });
+        }
+        else if ($.cookie(".AspNetCore.Culture").includes("en-US")) {
             $("#en").css({"text-decoration": "underline"});
         }
         else if ($.cookie(".AspNetCore.Culture").includes("uk-UA")) {

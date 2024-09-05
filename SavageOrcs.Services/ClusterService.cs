@@ -66,27 +66,27 @@ namespace SavageOrcs.Services
             {
                 if (filterByKeyWordIds)
                 {
-                    var keyWords = (await _helperService.GetAllKeyWords()).Where(x => keyWordIds.Contains(x.Id) && !string.IsNullOrEmpty(x.Name)).Select(x => _helperService.GetTranslation(x.Name, x.NameEng)).ToArray();
+                    var keyWords = (await _helperService.GetAllKeyWords()).Where(x => keyWordIds!.Contains(x.Id) && !string.IsNullOrEmpty(x.Name)).Select(x => _helperService.GetTranslation(x.Name, x.NameEng)).ToArray();
 
                     foreach (var cluster in clusters)
                     {
                         if (!string.IsNullOrEmpty(cluster.DescriptionEng)
-                            && keyWords.Any(y => Regex.IsMatch(cluster.DescriptionEng, @"\b" + Regex.Escape(y) + @"\b", RegexOptions.IgnoreCase)
-                            || Regex.IsMatch(y, @"\b" + Regex.Escape(cluster.DescriptionEng) + @"\b", RegexOptions.IgnoreCase)))
+                            && keyWords.Any(y => Regex.IsMatch(cluster.DescriptionEng, @"\b" + Regex.Escape(y!) + @"\b", RegexOptions.IgnoreCase)
+                            || Regex.IsMatch(y!, @"\b" + Regex.Escape(cluster.DescriptionEng) + @"\b", RegexOptions.IgnoreCase)))
                         {
                             resultClusters.Add(cluster);
                             continue;
                         }
                         if (!string.IsNullOrEmpty(cluster.Description)
-                            && keyWords.Any(y => Regex.IsMatch(cluster.Description, @"\b" + Regex.Escape(y) + @"\b", RegexOptions.IgnoreCase)
-                            || Regex.IsMatch(y, @"\b" + Regex.Escape(cluster.Description) + @"\b", RegexOptions.IgnoreCase)))
+                            && keyWords.Any(y => Regex.IsMatch(cluster.Description, @"\b" + Regex.Escape(y!) + @"\b", RegexOptions.IgnoreCase)
+                            || Regex.IsMatch(y!, @"\b" + Regex.Escape(cluster.Description) + @"\b", RegexOptions.IgnoreCase)))
                         {
                             resultClusters.Add(cluster);
                             continue;
                         }
                         if (!string.IsNullOrEmpty(cluster.Name)
-                            && keyWords.Any(y => Regex.IsMatch(cluster.Name, @"\b" + Regex.Escape(y) + @"\b", RegexOptions.IgnoreCase)
-                            || Regex.IsMatch(y, @"\b" + Regex.Escape(cluster.Name) + @"\b", RegexOptions.IgnoreCase)))
+                            && keyWords.Any(y => Regex.IsMatch(cluster.Name, @"\b" + Regex.Escape(y!) + @"\b", RegexOptions.IgnoreCase)
+                            || Regex.IsMatch(y!, @"\b" + Regex.Escape(cluster.Name) + @"\b", RegexOptions.IgnoreCase)))
                         {
                             resultClusters.Add(cluster);
                             continue;
@@ -97,12 +97,12 @@ namespace SavageOrcs.Services
 
             if (filterByClusterIds)
             {
-                resultClusters.AddRange(clusters.Where(x => clusterIds.Contains(x.Id)).ToList());
+                resultClusters.AddRange(clusters.Where(x => clusterIds!.Contains(x.Id)).ToList());
             }
 
             if (filterByAreaIds)
             {
-                resultClusters.AddRange(clusters.Where(x => x.AreaId.HasValue && areaIds.Contains(x.AreaId.Value)).ToList());
+                resultClusters.AddRange(clusters.Where(x => x.AreaId.HasValue && areaIds!.Contains(x.AreaId.Value)).ToList());
             }
 
             resultClusters = resultClusters.GroupBy(x => x.Id).Select(x => x.First()).ToList();

@@ -127,7 +127,7 @@ namespace SavageOrcs.Web.Controllers
 
             var markCatalogueViewModels = markDtos.Select(x => new MapMarkViewModel
             {
-                Id = x.Id.Value,
+                Id = x.Id!.Value,
                 Lat = x.Lat?.ToString().Replace(',', '.'),
                 Lng = x.Lng?.ToString().Replace(',', '.'),
                 Name = _helperService.GetTranslation(x.Name, x.NameEng),

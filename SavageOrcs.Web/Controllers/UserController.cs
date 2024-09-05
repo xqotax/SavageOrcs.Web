@@ -99,8 +99,8 @@ namespace SavageOrcs.Web.Controllers
             {
                 Id = saveUserViewModel.Id,
                 Email = saveUserViewModel.Email,
-                FirstName = saveUserViewModel.FirstName,
-                LastName = saveUserViewModel.LastName,
+                FirstName = saveUserViewModel.FirstName!,
+                LastName = saveUserViewModel.LastName!,
                 RoleIds = saveUserViewModel.RoleIds,
             };
 

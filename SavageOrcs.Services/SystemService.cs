@@ -7,11 +7,6 @@ using SavageOrcs.Repositories.Interfaces;
 using SavageOrcs.Services.Interfaces;
 using SavageOrcs.UnitOfWork;
 using SavageOrcs.Web.ViewModels.SystemSetting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SavageOrcs.Services
 {
@@ -21,13 +16,17 @@ namespace SavageOrcs.Services
         private readonly IConfiguration _configuration;
         private readonly IRepository<Curator> _curatorsRepository;
         private readonly IRepository<Area> _areasRepository;
+        private readonly IRepository<Mark> _marksRepository;
+        private readonly IRepository<Image> _imagesRepository;
 
-        public SystemService(IUnitOfWork unitOfWork, IRepository<SystemSetting> systemSettingRepository, IConfiguration configuration, IRepository<Curator> curatorsRepository, IRepository<Area> areasRepository) : base(unitOfWork)
+        public SystemService(IUnitOfWork unitOfWork, IRepository<SystemSetting> systemSettingRepository, IConfiguration configuration, IRepository<Curator> curatorsRepository, IRepository<Area> areasRepository, IRepository<Mark> marksRepository, IRepository<Image> imagesRepository) : base(unitOfWork)
         {
             _systemSettingRepository = systemSettingRepository;
             _configuration = configuration;
             _curatorsRepository = curatorsRepository;
             _areasRepository = areasRepository;
+            _marksRepository = marksRepository;
+            _imagesRepository = imagesRepository;
         }
 
         public async Task<string[]> GetAllKeysAsync()
@@ -39,9 +38,7 @@ namespace SavageOrcs.Services
         {
             var systemSetting = await _systemSettingRepository.GetTAsync(x => x.Name == key);
 
-            if (systemSetting == null) throw new NullReferenceException();
-
-            return CreateSystemSettingDto(systemSetting);
+            return systemSetting == null ? throw new NullReferenceException() : CreateSystemSettingDto(systemSetting);
         }
 
         public async Task<SystemSettingDto> GetSystemSettingAsync(Guid id)
@@ -84,11 +81,8 @@ namespace SavageOrcs.Services
         {
             try
             {
-                string certificatesFolder = _configuration["Certificates:ServerFolderPath"];
+                string certificatesFolder = _configuration["Certificates:FolderPath"];
 
-#if DEBUG
-                certificatesFolder = _configuration["Certificates:DeveloperFolderPath"];
-#endif
                 var sheetId = (await GetSystemSettingAsync("SpreadsheetId")).Value;
                 var sheetName = (await GetSystemSettingAsync("SheetName")).Value;
 
@@ -108,6 +102,11 @@ namespace SavageOrcs.Services
                 };
 
                 var result = parser.Start();
+
+                await _marksRepository.AddRangeAsync(result.Marks.Values);
+                await _imagesRepository.AddRangeAsync(result.Images.Values);
+
+                await UnitOfWork.SaveChangesAsync();
 
                 return "Success";
             }

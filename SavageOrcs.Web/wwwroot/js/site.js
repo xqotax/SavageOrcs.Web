@@ -45,7 +45,7 @@ function ResultPopUp(success, text, url, id) {
         $("#alert-custom").addClass("alert-custom-error");
     setTimeout(function () {
         $("#alert-custom").remove();
-    }, 4000);
+    }, 10000);
 };
 var MapMainView = Class.extend({
     Lat: null,

@@ -32,7 +32,7 @@ namespace SavageOrcs.Web.Areas.Identity.Pages.Account.Manage
         [TempData]
         public string StatusMessage { get; set; }
 
-        public async Task<IActionResult> OnGet()
+        public IActionResult OnGet()
         {
             return RedirectToAction("NotFound");
 

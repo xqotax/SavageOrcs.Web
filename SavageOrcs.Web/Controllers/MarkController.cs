@@ -299,7 +299,7 @@ namespace SavageOrcs.Web.Controllers
 
             unitedCatalogueViewModel.MarkNames = markDtos.Select(x => new GuidIdAndNameViewModel
             {
-                Id = x.Id.Value,
+                Id = x.Id!.Value,
                 Name = _helperService.GetSubstringForFilters(_helperService.GetTranslation(x.Name, x.NameEng))
             }).Where(x => !unitedCatalogueViewModel.KeyWords
                     .Any(y => x.Name is not null && y.Name is not null && x.Name.Contains(y.Name, StringComparison.OrdinalIgnoreCase)))
@@ -390,7 +390,7 @@ namespace SavageOrcs.Web.Controllers
                 revisionImageViewModel = new RevisionImageViewModel
                 {
                     IsCluster = isCluster,
-                    Id = clusterDto.Id,
+                    Id = clusterDto!.Id,
                     Images = clusterDto.Marks.SelectMany(x => x.Images).Select(x => _helperService.GetImage(x.Content)).ToArray()
                 };
                 return PartialView("_CatalogueImage", revisionImageViewModel);
@@ -401,7 +401,7 @@ namespace SavageOrcs.Web.Controllers
             {
                 IsCluster = isCluster,
                 Id = id,
-                Images = markDto.Images.Select(x => _helperService.GetImage(x.Content)).ToArray()
+                Images = markDto!.Images.Select(x => _helperService.GetImage(x.Content)).ToArray()
             };
             return PartialView("_CatalogueImage", revisionImageViewModel);
         }

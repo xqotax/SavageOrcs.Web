@@ -20,8 +20,8 @@ namespace SavageOrcs.Services.Parser
         public string? SheetName {  get; set; } 
         public string? SheetId { get; set; }   
         
-        public Curator[] Curators { get; set; }
-        public Area[] Areas { get; set; }
+        public Curator[] Curators { get; set; } = Array.Empty<Curator>();
+        public Area[] Areas { get; set; } = Array.Empty<Area>();
 
         public ParserResult Start()
         {
@@ -63,8 +63,6 @@ namespace SavageOrcs.Services.Parser
                 if (i > 3) break;
 #endif
             }
-
-            throw new NotSupportedException();
 
             var dbMarks = new Dictionary<int, Mark>();
             var dbImages = new Dictionary<int, Image>();
@@ -174,10 +172,8 @@ namespace SavageOrcs.Services.Parser
                 var fileRequest = driveService.Files.Get(fileId);
                 fileRequest.Fields = "id,name,createdTime";
 
-                // Виконати запит та отримати відповідь
                 var fileResponse = fileRequest.Execute();
 
-                // Виклик API для завантаження файлу
                 using var stream = new MemoryStream();
                 var downloadRequest = driveService.Files.Get(fileId);
                 downloadRequest.Download(stream);
@@ -185,7 +181,7 @@ namespace SavageOrcs.Services.Parser
                 return new GoogleDriveFileDto
                 {
                     Id = fileId,
-                    CreatedDate = fileResponse.CreatedTime,
+                    CreatedDate = fileResponse.CreatedTimeDateTimeOffset?.Date!,
                     Name = fileResponse.Name,
                     //Stream = stream,
                     Bytes = ConvertMemoryStreamToBase64DataUrl(stream, Path.GetExtension(fileResponse.Name))
@@ -234,7 +230,7 @@ namespace SavageOrcs.Services.Parser
                 var headers = new Dictionary<int, string>();
                 foreach (var header in response.Values[0])
                     if (header is not null)
-                        headers.Add(response.Values[0].IndexOf(header), header.ToString());
+                        headers.Add(response.Values[0].IndexOf(header), header.ToString()!);
 
 
                 var statusCol = headers.FirstOrDefault(x => x.Value.Trim() == "Статус");
@@ -250,48 +246,48 @@ namespace SavageOrcs.Services.Parser
                     };
                     for (var j = 0; j < response.Values[i].Count; j++)
                     {
-                        if (headers.TryGetValue(j, out string header))
+                        if (headers.TryGetValue(j, out string? header))
                         {
                             switch (header.Trim())
                             {
                                 case "Посилання на зображення":
-                                    mark.FileUrl = response.Values[i][j].ToString();
+                                    mark.FileUrl = response.Values[i][j].ToString()!;
                                     break;
                                 case "Назва":
-                                    mark.Name = response.Values[i][j].ToString();
+                                    mark.Name = response.Values[i][j].ToString()!;
                                     break;
                                 case "Назва для іноземних користувачів":
-                                    mark.EngName = response.Values[i][j].ToString();
+                                    mark.EngName = response.Values[i][j].ToString()!;
                                     break;
                                 case "Опис":
-                                    mark.Description = response.Values[i][j].ToString();
+                                    mark.Description = response.Values[i][j].ToString()!;
                                     break;
                                 case "Опис для іноземних користувачів":
-                                    mark.DescriptionEng = response.Values[i][j].ToString();
+                                    mark.DescriptionEng = response.Values[i][j].ToString()!;
                                     break;
                                 case "Населений пункт":
-                                    mark.City = response.Values[i][j].ToString();
+                                    mark.City = response.Values[i][j].ToString()!;
                                     break;
                                 case "Назва ресурсу":
-                                    mark.Resource = response.Values[i][j].ToString();
+                                    mark.Resource = response.Values[i][j].ToString()!;
                                     break;
                                 case "Назва ресурсу для іноземних користувачів":
-                                    mark.ResourceEng = response.Values[i][j].ToString();
+                                    mark.ResourceEng = response.Values[i][j].ToString()!;
                                     break;
                                 case "Посилання на ресурс ":
-                                    mark.ResourceUlr = response.Values[i][j].ToString();
+                                    mark.ResourceUlr = response.Values[i][j].ToString()!;
                                     break;
                                 case "Куратор":
-                                    mark.Curator = response.Values[i][j].ToString();
+                                    mark.Curator = response.Values[i][j].ToString()!;
                                     break;
                                 case "Координати":
-                                    mark.Coordinate = response.Values[i][j].ToString();
+                                    mark.Coordinate = response.Values[i][j].ToString()!;
                                     break;
                                 case "Готовий в обробку":
-                                    mark.IsReadyToProcces = response.Values[i][j].ToString();
+                                    mark.IsReadyToProcces = response.Values[i][j].ToString()!;
                                     break;
                                 case "Статус":
-                                    mark.Status = response.Values[i][j].ToString();
+                                    mark.Status = response.Values[i][j].ToString()!;
                                     break;
 
                             }
@@ -300,14 +296,14 @@ namespace SavageOrcs.Services.Parser
 
                     if (mark.Status == "Оброблений")
                         break;
-                    else
-                    {
-                        string updateRange = $"{sheetName}!{GetColumnName(statusCol.Key + 1)}{i + 1}"; 
-                        var valueRange = new ValueRange { Values = new List<IList<object>> { new List<object> { "Оброблений" } } };
-                        var updateRequest = service.Spreadsheets.Values.Update(valueRange, docId, updateRange);
-                        updateRequest.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.RAW;
-                        var updateResponse = updateRequest.Execute();
-                    }
+                    //else
+                    //{
+                    //    string updateRange = $"{sheetName}!{GetColumnName(statusCol.Key + 1)}{i + 1}"; 
+                    //    var valueRange = new ValueRange { Values = new List<IList<object>> { new List<object> { "Оброблений" } } };
+                    //    var updateRequest = service.Spreadsheets.Values.Update(valueRange, docId, updateRange);
+                    //    updateRequest.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.RAW;
+                    //    var updateResponse = updateRequest.Execute();
+                    //}
 
                     marks.Add(mark);
                 }
@@ -316,7 +312,7 @@ namespace SavageOrcs.Services.Parser
             return marks;
         }
 
-        private string GetColumnName(int columnNumber)
+        private static string GetColumnName(int columnNumber)
         {
             const int baseValue = 'A' - 1;
             string columnName = "";
@@ -343,7 +339,7 @@ namespace SavageOrcs.Services.Parser
 
     public class ParserResult
     {
-        public Dictionary<int, Mark> Marks { get; set; }   
-        public Dictionary<int, Image> Images { get; set; }   
+        public Dictionary<int, Mark> Marks { get; set; }   = new Dictionary<int, Mark>();
+        public Dictionary<int, Image> Images { get; set; } = new Dictionary<int, Image>();
     }
 }

@@ -78,7 +78,7 @@ namespace SavageOrcs.Web.Areas.Identity.Pages.Account.Manage
             public string ConfirmPassword { get; set; }
         }
 
-        public async Task<IActionResult> OnGetAsync()
+        public IActionResult OnGetAsync()
         {
             return RedirectToAction("NotFound");
 
@@ -97,7 +97,7 @@ namespace SavageOrcs.Web.Areas.Identity.Pages.Account.Manage
             //return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public IActionResult OnPostAsync()
         {
             return RedirectToAction("NotFound");
 

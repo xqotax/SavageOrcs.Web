@@ -58,7 +58,7 @@
                 </div>
             </div>
             <div class="table-body-revision-user display-8-custom text-white-custom">
-                @for (int i = 1; i < Model.AllRoles.Length + 1; i++)
+                @for (int i = 1; i < Model.AllRoles!.Length + 1; i++)
                 {
                     <div class="table-body-row justify-content-center d-flex">
                         <div class="table-body-revision-user-number">
@@ -69,7 +69,7 @@
                         </div>
                         <div class="table-body-revision-user-role-status">
                             <input @{
-                               if (Model.RoleIds.Contains(Model.AllRoles[i-1].Id)) {
+                               if (Model.RoleIds!.Contains(Model.AllRoles[i-1].Id)) {
                                    @("checked=\"checked")
 ;
                                }

@@ -59,7 +59,7 @@ namespace SavageOrcs.Web.Areas.Identity.Pages.Account
             public string RecoveryCode { get; set; }
         }
 
-        public async Task<IActionResult> OnGetAsync(string returnUrl = null)
+        public IActionResult OnGetAsync(string returnUrl = null)
         {
             return RedirectToAction("NotFound");
 
@@ -75,7 +75,7 @@ namespace SavageOrcs.Web.Areas.Identity.Pages.Account
             //return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+        public IActionResult OnPostAsync(string returnUrl = null)
         {
             return RedirectToAction("NotFound");
 

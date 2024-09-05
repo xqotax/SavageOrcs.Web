@@ -176,10 +176,10 @@ input[type="checkbox"]:checked {
 #alert-custom {
     position: fixed;
     z-index: 10000;
-    width: 15%;
-    height: 100px;
+    width: 25%;
+    height: 250px;
     top: 30px;
-    left: 40%;
+    left: 25%;
     color: white;
     border-radius: 1%;
     display: flex;

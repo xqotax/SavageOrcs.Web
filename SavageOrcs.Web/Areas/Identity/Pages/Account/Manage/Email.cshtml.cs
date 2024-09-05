@@ -87,7 +87,7 @@ namespace SavageOrcs.Web.Areas.Identity.Pages.Account.Manage
             IsEmailConfirmed = await _userManager.IsEmailConfirmedAsync(user);
         }
 
-        public async Task<IActionResult> OnGetAsync()
+        public IActionResult OnGetAsync()
         {
             return RedirectToAction("NotFound");
             //var user = await _userManager.GetUserAsync(User);
@@ -100,7 +100,7 @@ namespace SavageOrcs.Web.Areas.Identity.Pages.Account.Manage
             //return Page();
         }
 
-        public async Task<IActionResult> OnPostChangeEmailAsync()
+        public IActionResult OnPostChangeEmailAsync()
         {
             return RedirectToAction("NotFound");
 
@@ -140,7 +140,7 @@ namespace SavageOrcs.Web.Areas.Identity.Pages.Account.Manage
             //return RedirectToPage();
         }
 
-        public async Task<IActionResult> OnPostSendVerificationEmailAsync()
+        public IActionResult OnPostSendVerificationEmailAsync()
         {
             return RedirectToAction("NotFound");
 

@@ -10,13 +10,13 @@ namespace SavageOrcs.Web.ViewModels.Map
 
         public string? Lng { get; set; }
 
-        public string Zoom { get; set; }
+        public string Zoom { get; set; } = string.Empty;
 
         public string? Name { get; set; }
 
-        public MapMarkViewModel[] MapMarkViewModels { get; set; }
+        public MapMarkViewModel[] MapMarkViewModels { get; set; } = Array.Empty<MapMarkViewModel>();
 
-        public MapClusterViewModel[] MapClusterViewModels { get; set; }
+        public MapClusterViewModel[] MapClusterViewModels { get; set; } = Array.Empty<MapClusterViewModel>();
 
         public string GoogleMapKey { get; set; } = string.Empty;
     }

@@ -1,3 +1,4 @@
+using Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,11 +20,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 string? connectionString;
-#if DEBUG
-connectionString = builder.Configuration.GetConnectionString("DeveloperConnection");
-#else
-    connectionString = builder.Configuration.GetConnectionString("SavageOrcsDbContextConnection");
-#endif
+
+connectionString = builder.Configuration.GetConnectionString("SavageOrcsDbContextConnection");
 
 builder.Services.AddDbContext<SavageOrcsDbContext>(options =>
     options.UseLazyLoadingProxies().UseSqlServer(connectionString));
@@ -67,26 +65,26 @@ builder.Services.AddMvc()
     {
         options.DataAnnotationLocalizerProvider = (type, factory) =>
         {
-            var asseblyName = new AssemblyName(typeof(TextResource).GetTypeInfo().Assembly.FullName);
-            return factory.Create("TextResource", asseblyName.Name);
+            var asseblyName = new AssemblyName(typeof(TextResource).GetTypeInfo().Assembly.FullName!);
+            return factory.Create("TextResource", asseblyName.Name!);
         };
     })
     .AddDataAnnotationsLocalization(options =>
     {
         options.DataAnnotationLocalizerProvider = (type, factory) =>
         {
-            var asseblyName = new AssemblyName(typeof(CuratorResource).GetTypeInfo().Assembly.FullName);
-            return factory.Create("CuratorResource", asseblyName.Name);
+            var asseblyName = new AssemblyName(typeof(CuratorResource).GetTypeInfo().Assembly.FullName!);
+            return factory.Create("CuratorResource", asseblyName.Name!);
         };
     })
     .AddDataAnnotationsLocalization(options =>
     {
         options.DataAnnotationLocalizerProvider = (type, factory) =>
         {
-            var assemblyName = new AssemblyName(typeof(MarkResource).GetTypeInfo().Assembly.FullName);
-            return factory.Create("MarkResource", assemblyName.Name);
+            var assemblyName = new AssemblyName(typeof(MarkResource).GetTypeInfo().Assembly.FullName!);
+            return factory.Create("MarkResource", assemblyName.Name!);
         };
-    }); 
+    });
 
 
 builder.Services.Configure<RequestLocalizationOptions>(
@@ -94,8 +92,8 @@ builder.Services.Configure<RequestLocalizationOptions>(
     {
         var supportedCultures = new List<CultureInfo>
         {
-            new CultureInfo("en-US"),
-            new CultureInfo("uk-UA")
+            new("en-US"),
+            new("uk-UA")
         };
         options.DefaultRequestCulture = new RequestCulture(culture: "en-US", uiCulture: "en-US");
         options.SupportedCultures = supportedCultures;
@@ -135,8 +133,14 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "Error",
     pattern: "{*val}",
-    defaults: new { controller = "Error", action = "Error"});
+    defaults: new { controller = "Error", action = "Error" });
 
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<SavageOrcsDbContext>();
+    db.Database.Migrate();
+}
 //app.MapControllerRoute(
 //       name: "SystemSetting",
 //       pattern: "{controller=SystemSetting}",

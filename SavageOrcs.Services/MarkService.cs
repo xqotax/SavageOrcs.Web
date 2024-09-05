@@ -50,27 +50,27 @@ namespace SavageOrcs.Services
 
             if (filterByKeyWordIds)
             {
-                var keyWords = (await _helperService.GetAllKeyWords()).Where(x => keyWordIds.Contains(x.Id) && !string.IsNullOrEmpty(x.Name)).Select(x => _helperService.GetTranslation(x.Name, x.NameEng)).ToArray();
+                var keyWords = (await _helperService.GetAllKeyWords()).Where(x => keyWordIds!.Contains(x.Id) && !string.IsNullOrEmpty(x.Name)).Select(x => _helperService.GetTranslation(x.Name, x.NameEng)).ToArray();
 
                 foreach (var mark in marks)
                 {
                     if (!string.IsNullOrEmpty(mark.DescriptionEng)
-                        && keyWords.Any(y => Regex.IsMatch(mark.DescriptionEng, @"\b" + Regex.Escape(y) + @"\b", RegexOptions.IgnoreCase)
-                        || Regex.IsMatch(y, @"\b" + Regex.Escape(mark.DescriptionEng) + @"\b", RegexOptions.IgnoreCase)))
+                        && keyWords.Any(y => Regex.IsMatch(mark.DescriptionEng, @"\b" + Regex.Escape(y!) + @"\b", RegexOptions.IgnoreCase)
+                        || Regex.IsMatch(y!, @"\b" + Regex.Escape(mark.DescriptionEng) + @"\b", RegexOptions.IgnoreCase)))
                     {
                         resultMarks.Add(mark);
                         continue;
                     }
                     if (!string.IsNullOrEmpty(mark.Description)
-                        && keyWords.Any(y => Regex.IsMatch(mark.Description, @"\b" + Regex.Escape(y) + @"\b", RegexOptions.IgnoreCase)
-                        || Regex.IsMatch(y, @"\b" + Regex.Escape(mark.Description) + @"\b", RegexOptions.IgnoreCase)))
+                        && keyWords.Any(y => Regex.IsMatch(mark.Description, @"\b" + Regex.Escape(y!) + @"\b", RegexOptions.IgnoreCase)
+                        || Regex.IsMatch(y!, @"\b" + Regex.Escape(mark.Description) + @"\b", RegexOptions.IgnoreCase)))
                     {
                         resultMarks.Add(mark);
                         continue;
                     }
                     if (!string.IsNullOrEmpty(mark.Name)
-                        && keyWords.Any(y => Regex.IsMatch(mark.Name, @"\b" + Regex.Escape(y) + @"\b", RegexOptions.IgnoreCase)
-                        || Regex.IsMatch(y, @"\b" + Regex.Escape(mark.Name) + @"\b", RegexOptions.IgnoreCase)))
+                        && keyWords.Any(y => Regex.IsMatch(mark.Name, @"\b" + Regex.Escape(y!) + @"\b", RegexOptions.IgnoreCase)
+                        || Regex.IsMatch(y!, @"\b" + Regex.Escape(mark.Name) + @"\b", RegexOptions.IgnoreCase)))
                     {
                         resultMarks.Add(mark);
                         continue;
@@ -81,17 +81,17 @@ namespace SavageOrcs.Services
 
             if (filterByMarkIds)
             {
-                resultMarks.AddRange(marks.Where(x => markIds.Contains(x.Id)).ToList());
+                resultMarks.AddRange(marks.Where(x => markIds!.Contains(x.Id)).ToList());
             }
 
             if (filterByClusterIds)
             {
-                resultMarks.AddRange(marks.Where(x => x.ClusterId.HasValue && markIds.Contains(x.ClusterId.Value)).ToList());
+                resultMarks.AddRange(marks.Where(x => x.ClusterId.HasValue && markIds!.Contains(x.ClusterId.Value)).ToList());
             }
 
             if (filterByAreaIds)
             {
-                resultMarks.AddRange(marks.Where(x => x.AreaId.HasValue && areaIds.Contains(x.AreaId.Value)).ToList());
+                resultMarks.AddRange(marks.Where(x => x.AreaId.HasValue && areaIds!.Contains(x.AreaId.Value)).ToList());
             }
 
             resultMarks = resultMarks.GroupBy(x => x.Id).Select(x => x.First()).ToList();

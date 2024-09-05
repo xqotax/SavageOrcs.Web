@@ -36,7 +36,7 @@ namespace SavageOrcs.Web.Areas.Identity.Pages.Account.Manage
             //return NotFound();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public IActionResult OnPostAsync()
         {
             return RedirectToAction("NotFound");
 
