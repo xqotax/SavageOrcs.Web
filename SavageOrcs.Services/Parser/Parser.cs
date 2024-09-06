@@ -59,9 +59,11 @@ namespace SavageOrcs.Services.Parser
 
                 mark.File = DownloadFile(driveService, fileId);
 
-#if DEBUG
-                if (i > 3) break;
-#endif
+                if (i % 10 == 0)
+                {
+                    i = i + i - i;
+                }
+
             }
 
             var dbMarks = new Dictionary<int, Mark>();
@@ -120,6 +122,15 @@ namespace SavageOrcs.Services.Parser
                     var cityNames = mark.City.Split(',');
                     if (cityNames.Length == 3)
                     {
+                        for (int k = 0; k < cityNames.Length; k++)
+                        {
+                            cityNames[k] = cityNames[k].Trim();
+                        }
+
+                        if (cityNames[2].EndsWith('.'))
+                        {
+                            cityNames[2] = cityNames[2].TrimEnd('.');
+                        }
 
                         dbMark.AreaId = Areas.FirstOrDefault(x => x.Name.ToLower().Trim() == cityNames[0].ToLower().Trim()
                         && x.Community.ToLower().Trim() == cityNames[1].ToLower().Trim()
