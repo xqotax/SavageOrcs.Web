@@ -20,6 +20,5 @@ namespace SavageOrcs.Web.ViewModels.Mark
         public bool IsCluster { get; set; } = false;
 
         public string? ClusterName { get; set; }
-
     }
 }

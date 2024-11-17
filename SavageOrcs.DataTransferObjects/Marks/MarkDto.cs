@@ -76,5 +76,7 @@ namespace SavageOrcs.DataTransferObjects.Marks
         public bool IsVisible { get; set; }
 
         public AreaShortDto? Area { get; set; }
+
+        public DateTime CreatedDate { get; set; }
     }
 }

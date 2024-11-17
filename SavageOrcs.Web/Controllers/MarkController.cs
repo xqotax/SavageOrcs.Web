@@ -92,7 +92,7 @@ namespace SavageOrcs.Web.Controllers
             }
         }
 
-        
+
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Add(Guid? id)
         {
@@ -280,6 +280,11 @@ namespace SavageOrcs.Web.Controllers
             var markDtos = await _markService.GetShortMarks();
             var clusterDtos = await _clusterService.GetClusters();
 
+            if (User.IsInRole("Admin"))
+            {
+                markDtos =markDtos.OrderByDescending(x => x.CreatedDate).ToArray();
+            }
+
             if (!User.IsInRole("Admin"))
             {
                 markDtos = markDtos.Where(x => x.IsVisible).ToArray();
@@ -356,6 +361,7 @@ namespace SavageOrcs.Web.Controllers
                             + _helperService.GetTranslation(x.Area.Community, x.Area.CommunityEng) + ", "
                             + _helperService.GetTranslation(x.Area.Region, x.Area.RegionEng),
                     },
+                    IsCluster = false
                 })
                     .Concat(clusterDtos.Select(x => new MarkCatalogueViewModel
                     {
@@ -377,6 +383,8 @@ namespace SavageOrcs.Web.Controllers
                     .ToArray();
 
             }
+
+
 
             return View("Catalogue", unitedCatalogueViewModel);
         }

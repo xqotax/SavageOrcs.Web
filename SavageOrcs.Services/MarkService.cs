@@ -157,6 +157,7 @@ namespace SavageOrcs.Services
                     CommunityEng = mark.Area.CommunityEng,
                     RegionEng = mark.Area.RegionEng,
                 },
+                CreatedDate = mark.CreatedDate,
             };
         }
 
