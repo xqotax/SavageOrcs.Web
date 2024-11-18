@@ -422,6 +422,11 @@ namespace SavageOrcs.Web.Controllers
             var markDtos = await _markService.GetMarksByFilters(filter.SelectedKeyWordIds, filter.SelectedMarkIds, filter.SelectedClusterIds, filter.SelectedAreaIds);
             var clusterDtos = await _clusterService.GetClustersByFilters(filter.SelectedKeyWordIds, filter.SelectedClusterIds, filter.SelectedAreaIds);
 
+            if (User.IsInRole("Admin"))
+            {
+                markDtos = markDtos.OrderByDescending(x => x.CreatedDate).ToArray();
+            }
+
             var markCatalogueViewModel = markDtos.Select(x => new MarkCatalogueViewModel
             {
                 Id = x.Id,
