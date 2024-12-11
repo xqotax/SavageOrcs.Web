@@ -2060,10 +2060,10 @@ var AddTextView = Class.extend({
                     class: Header,
                     inlineToolbar: true
                 },
-                list: {
-                    class: EditorjsList,
-                    inlineToolbar: true
-                },
+                //list: {
+                //    class: EditorjsList,
+                //    inlineToolbar: true
+                //},
                 raw: RawTool,
                 //checklist: {
                 //    class: Checklist,
