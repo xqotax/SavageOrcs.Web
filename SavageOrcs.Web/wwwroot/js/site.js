@@ -2061,7 +2061,7 @@ var AddTextView = Class.extend({
                     inlineToolbar: true
                 },
                 list: {
-                    class: List,
+                    class: EditorjsList,
                     inlineToolbar: true
                 },
                 raw: RawTool,
